@@ -25,6 +25,22 @@
                 in_url = "https://" + in_url;
             return in_url;
         }
+        //Caching functions
+        function writeToCache(in_string) {
+            if (typeof(Storage) !== "undefined") {
+                console.log("Wrote " + in_string); //Test
+            }
+            else
+                console.log("Local storage not supported in this browser, model and dataset sources will not be cached.");
+        }
+        //To-do
+        function deleteFromCache(in_string) {
+
+        }
+        //To-do
+        function retrieveCache() {
+
+        }
         //Model reference retrieval function
         function retrieveModel() {
             var modelURL = appendPrefixIfMissing(document.getElementById("modelURL").value);
@@ -34,6 +50,7 @@
             option.text = split_modelURL[2];
             option.value = split_modelURL[1] + "/" + split_modelURL[2];
             dropdown.add(option);
+            writeToCache("model");
         }
         //Dataset reference retrieval function
         function retrieveDataset() {
@@ -44,6 +61,7 @@
             option.text = split_datasetURL[2];
             option.value = split_datasetURL[1] + "/" + split_datasetURL[2];
             dropdown.add(option);
+            writeToCache("dataset");
         }
         //Obtain a reference to currently selected form values - used for Parameter display
         function retrieveCurrentSelection() {
