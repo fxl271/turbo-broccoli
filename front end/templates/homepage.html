@@ -32,25 +32,45 @@
             <div class="col">
                 <div class="mb-3">
                     <label for="model" class="form-label">Model: </label>
-                    <input type="text" name="modelTextbox" id="modelURL" placeholder="Enter Model URL">
-                    <input type="button" name="modelTextbox" onclick="saveModel()" value="save">
-                    <select id="modelDropdown" class="form-select" aria-label="Model select">
-                        <option selected>Select model</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
+                    <div class="row">
+                        <div class="col">
+                            <select id="modelDropdown" class="form-select" aria-label="Model select">
+                                <option selected>Select model</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <input type="text" name="modelTextbox" class="form-control" id="modelURL"
+                                placeholder="Enter Model URL">
+                        </div>
+                        <div class="col">
+                            <input type="button" class="btn btn-primary" name="modelTextbox" onclick="saveModel()"
+                                value="save">
+                        </div>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="dataset" class="form-label">Dataset: </label>
-                    <input type="text" name="datasetTextbox" id="datasetURL" placeholder="Enter Dataset URL">
-                    <input type="button" name="datasetTextbox" onclick="saveDataset()" value="save">
-                    <select id="datasetDropdown" class="form-select" aria-label="Dataset select">
-                        <option selected>Select dataset</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
+                    <div class="row">
+                        <div class="col">
+                            <select id="datasetDropdown" class="form-select" aria-label="Dataset select">
+                                <option selected>Select dataset</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <input type="text" name="datasetTextbox" id="datasetURL" class="form-control"
+                                placeholder="Enter Dataset URL">
+                        </div>
+                        <div class="col">
+                            <input type="button" name="datasetTextbox" class="btn btn-primary" onclick="saveDataset()"
+                                value="save">
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col">
@@ -60,7 +80,7 @@
                 </div>
             </div>
         </div>
-        
+
 
     </form>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
