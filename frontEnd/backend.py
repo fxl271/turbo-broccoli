@@ -11,10 +11,12 @@ class MLThing:
         self.dataset = dataset
         self.params = params
         
-
+        train_model(self.mlModel, self.dataset, self.params)
+        
     
     
-    
+#https://huggingface.co/distilbert-base-uncased
+#https://huggingface.co/datasets/rotten_tomatoes
 
     
     
