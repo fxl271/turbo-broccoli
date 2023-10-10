@@ -38,7 +38,6 @@ def train_model(dataset_name, model_name, limit_size=True, output_dir="path/to/s
             self.batch_start_time = 0
             self.batch_end_time = 0
             self.batch_time = 0
-            self.batches = 0
 
         def on_step_begin(self, args, state, control, **kwargs):
             self.batch_start_time = time.time()
@@ -47,7 +46,6 @@ def train_model(dataset_name, model_name, limit_size=True, output_dir="path/to/s
             self.batch_end_time = time.time()
             self.batch_time = self.batch_end_time - self.batch_start_time
             self.forward_pass_time += self.batch_time
-            self.batches += 1
 
         def on_epoch_end(self, args, state, control, **kwargs):
             end_time = time.time()
@@ -58,7 +56,6 @@ def train_model(dataset_name, model_name, limit_size=True, output_dir="path/to/s
             print(f"\n  - Total:\t {round(epoch_time,10)}s")
             print(f"  - Forward:\t {round(self.forward_pass_time,10)}s ({fwd_pass_percent}%)")
             print(f"  - Wgt&BkP:\t {round(wgt_pass_time,10)}s ({wgt_and_bkp_percent}%)")
-            print("Batches", self.batches)
 
     trainer = Trainer(
         model=model,
