@@ -70,6 +70,11 @@
                 console.log(split_modelURL[2]);
                 option.value = split_modelURL[1] + "/" + split_modelURL[2];
             }
+            else
+            {
+                console.log("Invalid URL")
+                return 0
+            }
             dropdown.add(option);
             writeToCache("model");
         }
@@ -92,6 +97,11 @@
                 option.text = split_datasetURL[2];
                 console.log(split_datasetURL[2]);
                 option.value = split_datasetURL[2] + "/" + split_datasetURL[3];
+            }
+            else
+            {
+                console.log("Invalid URL")
+                return 0
             }
             dropdown.add(option);
             writeToCache("dataset");
