@@ -25,6 +25,15 @@
                 in_url = "https://" + in_url;
             return in_url;
         }
+
+        // non community
+        // https://huggingface.co/distilbert-base-uncased  [1]
+        // https://huggingface.co/datasets/rotten_tomatoes [2]
+
+        // community
+        // https://huggingface.co/mistralai/Mistral-7B-v0.1    [1] + "/" + [2]
+        // https://huggingface.co/datasets/lmsys/lmsys-chat-1m [2] + "/" + [3]
+
         //Caching functions
         function writeToCache(in_string) {
             if (typeof(Storage) !== "undefined") {
@@ -47,9 +56,20 @@
             var split_modelURL = splitURL(modelURL);
             var dropdown = document.getElementById("modelDropdown");
             var option = document.createElement("option");
-            option.text = split_modelURL[1];
-            console.log(split_modelURL[1]);
-            option.value = split_modelURL[1];// + "/" + split_modelURL[2];
+            if(split_modelURL.length == 2)
+            {
+                //non-community
+                option.text = split_modelURL[1];
+                console.log(split_modelURL[1]);
+                option.value = split_modelURL[1];
+            }
+            else if(split_modelURL.length == 3)
+            {
+                //community
+                option.text = split_modelURL[2];
+                console.log(split_modelURL[2]);
+                option.value = split_modelURL[1] + "/" + split_modelURL[2];
+            }
             dropdown.add(option);
             writeToCache("model");
         }
@@ -59,9 +79,20 @@
             var split_datasetURL = splitURL(datasetURL);
             var dropdown = document.getElementById("datasetDropdown");
             var option = document.createElement("option");
-            option.text = split_datasetURL[2];
-            console.log(split_datasetURL[2]);
-            option.value = split_datasetURL[2];// + "/" + split_datasetURL[2];
+            if(split_datasetURL.length == 3)
+            {
+                //non-community
+                option.text = split_datasetURL[2];
+                console.log(split_datasetURL[2]);
+                option.value = split_datasetURL[2];
+            }
+            else if(split_datasetURL.length == 4)
+            {
+                //community
+                option.text = split_datasetURL[2];
+                console.log(split_datasetURL[2]);
+                option.value = split_datasetURL[2] + "/" + split_datasetURL[3];
+            }
             dropdown.add(option);
             writeToCache("dataset");
         }
