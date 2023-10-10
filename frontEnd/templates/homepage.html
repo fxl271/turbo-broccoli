@@ -25,19 +25,10 @@
                 in_url = "https://" + in_url;
             return in_url;
         }
-
-        // non community
-        // https://huggingface.co/distilbert-base-uncased  [1]
-        // https://huggingface.co/datasets/rotten_tomatoes [2]
-
-        // community
-        // https://huggingface.co/mistralai/Mistral-7B-v0.1    [1] + "/" + [2]
-        // https://huggingface.co/datasets/lmsys/lmsys-chat-1m [2] + "/" + [3]
-
         //Caching functions
         function writeToCache(in_string) {
             if (typeof(Storage) !== "undefined") {
-                console.log("Wrote " + in_string); //Test
+                ;//console.log("Wrote " + in_string); //Test
             }
             else
                 console.log("Local storage not supported in this browser, model and dataset sources will not be cached.");
@@ -60,23 +51,22 @@
             {
                 //non-community
                 option.text = split_modelURL[1];
-                console.log(split_modelURL[1]);
                 option.value = split_modelURL[1];
+                dropdown.add(option);
+                writeToCache("model");
             }
             else if(split_modelURL.length == 3)
             {
                 //community
-                option.text = split_modelURL[2];
-                console.log(split_modelURL[2]);
+                option.text = split_modelURL[1] + "/" + split_modelURL[2];
                 option.value = split_modelURL[1] + "/" + split_modelURL[2];
+                dropdown.add(option);
+                writeToCache("model");
             }
             else
             {
-                console.log("Invalid URL")
-                return 0
+                console.log("Invalid URL");
             }
-            dropdown.add(option);
-            writeToCache("model");
         }
         //Dataset reference retrieval function
         function retrieveDataset() {
@@ -88,23 +78,22 @@
             {
                 //non-community
                 option.text = split_datasetURL[2];
-                console.log(split_datasetURL[2]);
                 option.value = split_datasetURL[2];
+                dropdown.add(option);
+                writeToCache("dataset");
             }
             else if(split_datasetURL.length == 4)
             {
                 //community
-                option.text = split_datasetURL[2];
-                console.log(split_datasetURL[2]);
+                option.text = split_datasetURL[2] + "/" + split_datasetURL[3];
                 option.value = split_datasetURL[2] + "/" + split_datasetURL[3];
+                dropdown.add(option);
+                writeToCache("dataset");
             }
             else
             {
-                console.log("Invalid URL")
-                return 0
+                console.log("Invalid URL");
             }
-            dropdown.add(option);
-            writeToCache("dataset");
         }
         //Obtain a reference to currently selected form values - used for Parameter display
         function retrieveCurrentSelection() {
@@ -115,7 +104,7 @@
     </script>
 </head>
 
-<body>
+<body data-bs-theme="dark">
     <h1>title</h1>
     <form method="POST">
         <div class="row">
@@ -136,7 +125,7 @@
                                 placeholder="Enter Model URL">
                         </div>
                         <div class="col">
-                            <input type="button" name="modelTextbox" class="btn btn-primary" onclick="retrieveModel()"
+                            <input type="button" name="modelTextbox" onclick="retrieveModel()" class="btn btn-primary"
                                 value="Retrieve Model">
                         </div>
                     </div>
@@ -168,6 +157,7 @@
                 <div class="mb-3">
                     <label for="Parameters" class="form-label">Parameters</label>
                     <!-- load parameters here based on model selected-->
+                    <!-- Config -->
                 </div>
             </div>
         </div>
