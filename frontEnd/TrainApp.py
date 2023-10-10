@@ -72,4 +72,6 @@ def train_model(model_name, dataset_name, limit_size=True, output_dir="path/to/s
 
     trainer.train()
     
-    # Ex train_model("distilbert-base-uncased", "rotton_tomatos")
+#train_model("distilbert-base-uncased", "rotton_tomatos")
+    
+#train_model("bigscience/bloomz-560m", "bigscience/xP3")
