@@ -4,10 +4,13 @@ from datasets import load_dataset
 from transformers import DataCollatorWithPadding
 from transformers import Trainer
 from transformers import TrainerCallback
+from transformers import AutoModelForSequenceClassification
 import time
 
 
 def train_model(dataset_name, model_name, limit_size=True, output_dir="path/to/save/folder/", learning_rate=2e-5,per_device_train_batch_size=8,per_device_eval_batch_size=8, num_train_epochs=2):
+    model = AutoModelForSequenceClassification.from_pretrained(model_name)
+    
     training_args = TrainingArguments(
         output_dir,
         learning_rate,
@@ -22,7 +25,7 @@ def train_model(dataset_name, model_name, limit_size=True, output_dir="path/to/s
         return tokenizer(dataset["text"])
 
     if (limit_size):
-        dataset = load_dataset(dataset_name)['train'].train_test_split(train_size=800, test_size=200)
+        dataset = load_dataset(dataset_name)['train'].train_test_split(train_size=400, test_size=100)
     else:
         dataset = load_dataset(dataset_name)
 
@@ -68,3 +71,5 @@ def train_model(dataset_name, model_name, limit_size=True, output_dir="path/to/s
     )
 
     trainer.train()
+    
+    # Ex train_model("rotten_tomatoes", "distilbert-base-uncased")
