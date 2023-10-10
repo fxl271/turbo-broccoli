@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from backend import *
 
 app = Flask(__name__)
 
@@ -11,6 +12,9 @@ def homepage():
         datasetTag = request.form['datasetDropdown']
         #value = tag_lookup(tag)
         print(datasetTag)
+        
+        mlInstance = MLThing(modelTag, datasetTag, 5)
+        print(mlInstance.params)
     
     return render_template('homepage.html')
 
@@ -20,7 +24,6 @@ def homepage():
 @app.route("/results", methods=['GET'])
 def results():
     model = request.args.get('model')
-    
     dataset = request.args.get('dataset')
     parameters = request.args.get('parameters')
     return render_template('results.html', model=model, dataset=dataset, parameters=parameters)
