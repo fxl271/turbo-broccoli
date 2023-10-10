@@ -59,9 +59,9 @@
             var split_datasetURL = splitURL(datasetURL);
             var dropdown = document.getElementById("datasetDropdown");
             var option = document.createElement("option");
-            option.text = split_datasetURL[1];
-            console.log(split_datasetURL[1]);
-            option.value = split_datasetURL[1];// + "/" + split_datasetURL[2];
+            option.text = split_datasetURL[2];
+            console.log(split_datasetURL[2]);
+            option.value = split_datasetURL[2];// + "/" + split_datasetURL[2];
             dropdown.add(option);
             writeToCache("dataset");
         }
