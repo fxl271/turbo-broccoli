@@ -84,6 +84,6 @@ for epoch in range(epochs):
             )
             print("Seen so far: %s samples" % ((step + 1) * batch_size))
 
-    print(f"TOTAL FWD: {fwd_total}s\t BCK: {bck_total}s")
+    print(f"TOTAL FWD: {round(fwd_total,5)}s ({round((fwd_total/(fwd_total + bck_total)) * 100, 5)}%)\t BCK: {round(bck_total, 5)}s ({round((bck_total/(fwd_total + bck_total)) * 100, 5)}%)")
     fwd_total = 0
     bck_total = 0
