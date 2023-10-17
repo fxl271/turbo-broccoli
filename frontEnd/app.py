@@ -1,4 +1,5 @@
 import sys
+import pandas as pd
 from flask import Flask, Response, render_template, request, redirect, stream_with_context, url_for
 from backend import *
 
@@ -33,7 +34,8 @@ def results():
     model = request.args.get('model')
     dataset = request.args.get('dataset')
     parameters = request.args.get('parameters')
-    return render_template('results.html', model=model, dataset=dataset, parameters=parameters)
+    output = pd.read_csv("path/to/save/folder/emissions.csv") # replace this later with actual output data
+    return render_template('results.html', model=model, dataset=dataset, parameters=parameters, output=output)
 
 
 
