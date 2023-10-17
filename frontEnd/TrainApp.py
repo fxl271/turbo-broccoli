@@ -34,31 +34,37 @@ def train_model(model_name, dataset_name, limit_size=True, output_dir="path/to/s
     data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
     class My_Callback_Transformers(TrainerCallback):
-        def on_epoch_begin(self, args, state, control, **kwargs):
-            self.start_time = time.time()
-            self.forward_pass_time = 0
+        def on_train_begin(self, args, state, control, **kwargs):
+            self.train_startTime = time.time()
 
-            self.batch_start_time = 0
-            self.batch_end_time = 0
-            self.batch_time = 0
+            self.train_total = 0
+            self.epoch_total = 0
+            self.step_total = 0
+
+        def on_epoch_begin(self, args, state, control, **kwargs):
+            self.epoch_startTime = time.time()
 
         def on_step_begin(self, args, state, control, **kwargs):
-            self.batch_start_time = time.time()
+            self.step_startTime = time.time()
 
         def on_step_end(self, args, state, control, **kwargs):
-            self.batch_end_time = time.time()
-            self.batch_time = self.batch_end_time - self.batch_start_time
-            self.forward_pass_time += self.batch_time
+            self.step_endTime = time.time()
+            self.step_time = self.step_endTime - self.step_startTime
+            self.step_total = self.step_total + self.step_time
 
         def on_epoch_end(self, args, state, control, **kwargs):
-            end_time = time.time()
-            epoch_time = end_time - self.start_time
-            fwd_pass_percent = round((self.forward_pass_time/epoch_time)*100,2)
-            wgt_pass_time = epoch_time - self.forward_pass_time
-            wgt_and_bkp_percent = round((wgt_pass_time/epoch_time)*100,2)
-            print(f"\n  - Total:\t {round(epoch_time,10)}s")
-            print(f"  - Forward:\t {round(self.forward_pass_time,10)}s ({fwd_pass_percent}%)")
-            print(f"  - Wgt&BkP:\t {round(wgt_pass_time,10)}s ({wgt_and_bkp_percent}%)")
+            self.epoch_endTime = time.time()
+            self.epoch_time = self.epoch_endTime - self.epoch_startTime
+            self.epoch_total = self.epoch_total + self.epoch_time
+            print(f"\tEPOCH TIME: {round(self.epoch_time,5)}s")
+
+        def on_train_end(self, args, state, control, **kwargs):
+            self.train_endTime = time.time()
+            self.train_time = self.train_endTime - self.train_startTime
+            self.train_total = self.train_total + self.train_time
+            print(f"\t\tTRAIN TIME: {round(self.train_total,5)}s")
+            print(f"\t\t\tTOTAL STEP: {round(self.step_total,5)}s")
+            print(f"\t\t\tTOTAL EPOCH: {round(self.epoch_total,5)}s")
 
     trainer = Trainer(
         model=model,
