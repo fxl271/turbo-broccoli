@@ -1,5 +1,6 @@
 import sys
 import pandas as pd
+import datetime
 from flask import Flask, Response, render_template, request, redirect, stream_with_context, url_for
 from backend import *
 
@@ -17,16 +18,12 @@ def homepage():
         
         mlInstance = MLThing(modelTag, datasetTag, 5)
         print(mlInstance.params)
-        return render_template('results.html', model=modelTag, dataset=datasetTag, parameters=mlInstance.params)
+
+        output = pd.read_csv("emissions.csv")
+        output['duration'] = str(datetime.timedelta(seconds=output['duration'].iloc[0]))
+        return render_template('results.html', model=modelTag, dataset=datasetTag, parameters=mlInstance.params, output=output)
     
     return render_template('homepage.html')
-
-# @app.route("/output")
-# def output():
-#     def get_stdout():
-#         for i in range(10):
-#             yield str(i)
-#     return Response(get_stdout(), mimetype="text/event-stream")
 
 # http://127.0.0.1:5000/results?model=model_name&dataset=mydata&parameters=11
 @app.route("/results", methods=['GET'])
@@ -34,7 +31,8 @@ def results():
     model = request.args.get('model')
     dataset = request.args.get('dataset')
     parameters = request.args.get('parameters')
-    output = pd.read_csv("path/to/save/folder/emissions.csv") # replace this later with actual output data
+    output = pd.read_csv("emissions.csv")
+    output['duration'] = str(datetime.timedelta(seconds=output['duration'].iloc[0]))
     return render_template('results.html', model=model, dataset=dataset, parameters=parameters, output=output)
 
 

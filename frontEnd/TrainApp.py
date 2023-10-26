@@ -5,9 +5,11 @@ from transformers import DataCollatorWithPadding
 from transformers import Trainer
 from transformers import TrainerCallback
 from transformers import AutoModelForSequenceClassification
+from codecarbon import track_emissions
 import time
 
 
+@track_emissions(project_name="train_model")
 def train_model(model_name, dataset_name, limit_size=True, output_dir="path/to/save/folder/", learning_rate=2e-5,per_device_train_batch_size=8,per_device_eval_batch_size=8, num_train_epochs=2):
     model = AutoModelForSequenceClassification.from_pretrained(model_name)
     
@@ -75,7 +77,7 @@ def train_model(model_name, dataset_name, limit_size=True, output_dir="path/to/s
         data_collator=data_collator,
         callbacks=[My_Callback_Transformers()]
     )
-
+    
     trainer.train()
     
 #train_model("distilbert-base-uncased", "rotton_tomatos")
