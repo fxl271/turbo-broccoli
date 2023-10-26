@@ -1,7 +1,7 @@
 import sys
 import pandas as pd
 import datetime
-from flask import Flask, Response, render_template, request, redirect, stream_with_context, url_for
+from flask import Flask, Response, render_template, request, redirect, stream_with_context, send_file, url_for
 from backend import *
 
 app = Flask(__name__)
@@ -35,6 +35,8 @@ def results():
     output['duration'] = str(datetime.timedelta(seconds=output['duration'].iloc[0]))
     return render_template('results.html', model=model, dataset=dataset, parameters=parameters, output=output)
 
-
+@app.route("/emissions.csv", methods=['GET'])
+def emissions():
+    return send_file('emissions.csv')
 
 # flask --app app run --debug   
