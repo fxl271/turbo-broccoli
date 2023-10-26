@@ -157,11 +157,44 @@
                 </div>
             </div>
             <div class="col">
-                <div class="mb-3">
-                    <label for="Parameters" class="form-label">Parameters</label>
-                    <!-- load parameters here based on model selected-->
-                    <!-- Config -->
+                <label for="Parameters" class="form-label">Parameters</label>
+                <div class="row">
+                    <div class="col">
+                        <label class="col-form-label">Epochs:</label>
+                        <input type="number" name="epochs" id="epochs" class="form-control" value="1" min="1">
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="col">
+                        <label class="col-form-label">Learning Rate:</label>
+                        <input type="number" name="learningRate" id="learningRate" class="form-control" value="0.00002"
+                            step="0.0001" min="0">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label class="col-form-label">Limit dataset size:</label>
+                        <select id="limitDatasetSize" name="limitDatasetSize" class="form-select" required>
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label class="col-form-label">Per-device training batch size:</label>
+                        <input type="number" name="trainingBatchSize" id="trainingBatchSize" class="form-control"
+                            value="8" min="1">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label class="col-form-label">Per-device eval batch size:</label>
+                        <input type="number" name="evalBatchSize" id="evalBatchSize" class="form-control" value="8"
+                            min="1">
+                    </div>
+                </div>
+                <!-- load parameters here based on model selected-->
             </div>
         </div>
         <input type="submit" class="btn btn-primary" value="Submit">
