@@ -6,13 +6,10 @@ from transformers import Trainer
 from transformers import TrainerCallback
 from transformers import AutoModelForSequenceClassification
 from codecarbon import track_emissions
+from peft import PeftModelForSequenceClassification, get_peft_config
 import time
 
-
-@track_emissions(project_name="train_model")
-def train_model(model_name, dataset_name, limit_size=True, output_dir="path/to/save/folder/", learning_rate=2e-5,per_device_train_batch_size=8,per_device_eval_batch_size=8, num_train_epochs=2):
-    model = AutoModelForSequenceClassification.from_pretrained(model_name)
-    
+def get_trainer(model, model_name, dataset_name, limit_size=True, output_dir="path/to/save/folder/", learning_rate=2e-5,per_device_train_batch_size=8,per_device_eval_batch_size=8, num_train_epochs=2):
     training_args = TrainingArguments(
         output_dir,
         learning_rate,
@@ -77,8 +74,36 @@ def train_model(model_name, dataset_name, limit_size=True, output_dir="path/to/s
         data_collator=data_collator,
         callbacks=[My_Callback_Transformers()]
     )
-    
+    return trainer
+
+@track_emissions(project_name="train_model")
+def train_model(model_name, dataset_name, limit_size=True, output_dir="path/to/save/folder/", learning_rate=2e-5,per_device_train_batch_size=8,per_device_eval_batch_size=8, num_train_epochs=2):
+    model = AutoModelForSequenceClassification.from_pretrained(model_name)
+    trainer = get_trainer(model, model_name, dataset_name, limit_size, output_dir, learning_rate,per_device_train_batch_size,per_device_eval_batch_size, num_train_epochs)
     trainer.train()
+
+@track_emissions(project_name="train_model_peft")
+def train_model_peft(model_name, dataset_name, limit_size=True, output_dir="path/to/save/folder/", learning_rate=2e-5,per_device_train_batch_size=8,per_device_eval_batch_size=8, num_train_epochs=2):
+    config = {
+        "peft_type": "PREFIX_TUNING",
+        "task_type": "SEQ_CLS",
+        "inference_mode": False,
+        "num_virtual_tokens": 20,
+        "token_dim": 768,
+        "num_transformer_submodules": 1,
+        "num_attention_heads": 12,
+        "num_layers": 12,
+        "encoder_hidden_size": 768,
+        "prefix_projection": False,
+    }
+    peft_config = get_peft_config(config)
+
+    model = AutoModelForSequenceClassification.from_pretrained(model_name)
+    peft_model = PeftModelForSequenceClassification(model, peft_config)
+
+    trainer = get_trainer(peft_model, model_name, dataset_name, limit_size, output_dir, learning_rate,per_device_train_batch_size,per_device_eval_batch_size, num_train_epochs)
+    trainer.train()
+
     
 #train_model("distilbert-base-uncased", "rotton_tomatos")
     
