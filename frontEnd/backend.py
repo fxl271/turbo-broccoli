@@ -1,4 +1,4 @@
-from TrainApp import train_model
+from TrainApp import train_model, train_model_peft
 
 #train_model("distilbert-base-uncased", "rotton_tomatos")
 
