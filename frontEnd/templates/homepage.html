@@ -93,6 +93,7 @@
         function retrieveCurrentSelection() {
             var selectedModel = stringIsNot("Select model", document.getElementById("modelDropdown").value);
             var selectedDataset = stringIsNot("Select dataset", document.getElementById("datasetDropdown").value);
+            
             console.log("MODEL: " + selectedModel + "\tDATASET: " + selectedDataset);
         }
 
@@ -160,37 +161,37 @@
                 <label for="Parameters" class="form-label">Parameters</label>
                 <div class="row">
                     <div class="col">
-                        <label class="col-form-label">Epochs:</label>
-                        <input type="number" name="epochs" id="epochs" class="form-control" value="1" min="1">
+                        <label class="col-form-label">Epochs:</label> 
+                        <input id="epochs" name="param1value" type="number" onchange="retrieveCurrentSelection()" name="epochs" id="epochs" class="form-control" value="1" min="1">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <label class="col-form-label">Learning Rate:</label>
-                        <input type="number" name="learningRate" id="learningRate" class="form-control" value="0.0001"
+                        <input id="learningRate" name="param2value" type="number" onchange="retrieveCurrentSelection()" name="learningRate" id="learningRate" class="form-control" value="0.0001"
                             step="0.0001" min="0">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <label class="col-form-label">Limit dataset size:</label>
-                        <select id="limitDatasetSize" name="limitDatasetSize" class="form-select" required>
-                            <option value="true">True</option>
-                            <option value="false">False</option>
+                        <select id="limitDatasetSize" name="param3value" id="limitDatasetSize" onchange="retrieveCurrentSelection()" name="limitDatasetSize" class="form-select" required>
+                            <option value="True">True</option>
+                            <option value="False">False</option>
                         </select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <label class="col-form-label">Per-device training batch size:</label>
-                        <input type="number" name="trainingBatchSize" id="trainingBatchSize" class="form-control"
+                        <input id="trainingBatchSize" name="param4value" type="number" onchange="retrieveCurrentSelection()" name="trainingBatchSize" id="trainingBatchSize" class="form-control"
                             value="8" min="1">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <label class="col-form-label">Per-device eval batch size:</label>
-                        <input type="number" name="evalBatchSize" id="evalBatchSize" class="form-control" value="8"
+                        <input id="evalBatchSize" name="param5value" type="number" onchange="retrieveCurrentSelection()" name="evalBatchSize" id="evalBatchSize" class="form-control" value="8"
                             min="1">
                     </div>
                 </div>

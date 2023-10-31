@@ -16,12 +16,30 @@ def homepage():
         #value = tag_lookup(tag)
         print(datasetTag)
         
-        mlInstance = MLThing(modelTag, datasetTag, 5)
-        print(mlInstance.params)
+        #Dependent on number of params REMEMBER TO IMPLEMENT LATER
+        
+        paramNum = 5
+        paramLabels = [0] * (paramNum)
+        paramTag = [0] * (paramNum)
+        
+        #for i in range(1, paramNum):
+        #    paramLabels[i] = request.get['param' + str(i) + 'label']
+        
+        #print(paramLabels)
+        
+        for i in range(1, paramNum + 1):
+            paramTag[i - 1] = request.values['param' + str(i) + 'value']
+            
+        
+        
+        #paramTag = request.values['param1value']
+        print(paramTag)
+        mlInstance = MLThing(modelTag, datasetTag, paramTag)
+        
 
         output = pd.read_csv("emissions.csv")
         output['duration'] = str(datetime.timedelta(seconds=output['duration'].iloc[0]))
-        return render_template('results.html', model=modelTag, dataset=datasetTag, parameters=mlInstance.params, output=output)
+        return render_template('results.html', model=modelTag, dataset=datasetTag, parameters=paramTag, output=output)
     
     return render_template('homepage.html')
 
