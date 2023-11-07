@@ -15,10 +15,10 @@
         crossorigin="anonymous"></script>
     <h1>Results</h1>
     <h2>Model: {{ model }}</h2>
-    <h3>CPU: {{ output["cpu_model"].iloc[0] }} </h3>
-    <h3>GPU: {{ output["gpu_model"].iloc[0] }} </h3>
-    <!-- <h3>RAM: {{ output["ram_total_size"].iloc[0] }} </h3> -->
-    <h3>OS: {{ output["os"].iloc[0] }}</h3>
+    <h3>CPU: {{ output["cpu_model"] }} </h3>
+    <h3>GPU: {{ output["gpu_model"] }} </h3>
+    <!-- <h3>RAM: {{ output["ram_total_size"] }} </h3> -->
+    <h3>OS: {{ output["os"] }}</h3>
 
     <table class="table table-hover">
         <!-- params table-->
@@ -43,51 +43,51 @@
                 <th scope="col"></th>
             </tr>
         </thead>
-        
+
         <tbody class="table-group-divider">
             <tr>
                 <th scope="row">Duration (hh:mm:ss)</th>
-                <td> {{ output["duration"].iloc[0] }} </td>
+                <td> {{ output["duration"] }} </td>
             </tr>
             <tr>
                 <th scope="row">Energy usage (kWh)</th>
-                <td> {{ output["energy_consumed"].iloc[0] }} </td>
+                <td> {{ output["energy_consumed"] }} </td>
             </tr>
             <tr>
                 <th scope="row">Carbon emissions (kg)</th>
-                <td> {{ output["emissions"].iloc[0] }} </td>
+                <td> {{ output["emissions"] }} </td>
             </tr>
             <tr>
                 <th scope="row">Emissions rate (kg/s)</th>
-                <td> {{ output["emissions_rate"].iloc[0] }} </td>
+                <td> {{ output["emissions_rate"] }} </td>
             </tr>
             <tr>
                 <th scope="row">CPU power (W)</th>
-                <td> {{ output["cpu_power"].iloc[0] }} </td>
+                <td> {{ output["cpu_power"] }} </td>
             </tr>
             <tr>
                 <th scope="row">GPU power (W)</th>
-                <td> {{ output["gpu_power"].iloc[0] }} </td>
+                <td> {{ output["gpu_power"] }} </td>
             </tr>
             <tr>
                 <th scope="row">RAM power (W)</th>
-                <td> {{ output["ram_power"].iloc[0] }} </td>
+                <td> {{ output["ram_power"] }} </td>
             </tr>
             <tr>
                 <th scope="row">Energy used per CPU (kWH)</th>
-                <td> {{ output["cpu_energy"].iloc[0] }} </td>
+                <td> {{ output["cpu_energy"] }} </td>
             </tr>
             <tr>
                 <th scope="row">Energy used per GPU (kWH)</th>
-                <td> {{ output["gpu_energy"].iloc[0] }} </td>
+                <td> {{ output["gpu_energy"] }} </td>
             </tr>
             <tr>
                 <th scope="row">Energy used per RAM (kWH)</th>
-                <td> {{ output["ram_energy"].iloc[0] }} </td>
+                <td> {{ output["ram_energy"] }} </td>
             </tr>
             <tr>
                 <th scope="row">Total energy consumed (kWH)</th>
-                <td> {{ output["energy_consumed"].iloc[0] }} </td>
+                <td> {{ output["energy_consumed"] }} </td>
             </tr>
         </tbody>
     </table>
