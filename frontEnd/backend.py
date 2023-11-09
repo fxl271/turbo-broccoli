@@ -10,7 +10,7 @@ class MLThing:
         self.params = params
         self.peft_type = peftType
 
-        if peftType == "LORA":
+        if peftType == "LoRA":
             train_model_peft(
                 model_name=self.mlModel,
                 dataset_name=self.dataset,

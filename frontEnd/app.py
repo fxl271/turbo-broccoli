@@ -67,13 +67,14 @@ def results():
     model = request.args.get("model")
     dataset = request.args.get("dataset")
     parameters = request.args.get("parameters")
-    output = pd.read_csv("emissions.csv")
+    output = pd.read_csv("emissions.csv").iloc[-1]
     output["duration"] = str(datetime.timedelta(seconds=output["duration"]))
     return render_template(
         "results.html",
         model=model,
         dataset=dataset,
         parameters=parameters,
+        peftType="None",
         output=output,
     )
 
