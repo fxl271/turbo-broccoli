@@ -93,7 +93,7 @@
         function retrieveCurrentSelection() {
             var selectedModel = stringIsNot("Select model", document.getElementById("modelDropdown").value);
             var selectedDataset = stringIsNot("Select dataset", document.getElementById("datasetDropdown").value);
-            
+
             console.log("MODEL: " + selectedModel + "\tDATASET: " + selectedDataset);
         }
 
@@ -161,21 +161,24 @@
                 <label for="Parameters" class="form-label">Parameters</label>
                 <div class="row">
                     <div class="col">
-                        <label class="col-form-label">Epochs:</label> 
-                        <input id="epochs" name="param1value" type="number" onchange="retrieveCurrentSelection()" name="epochs" id="epochs" class="form-control" value="1" min="1">
+                        <label class="col-form-label">Epochs:</label>
+                        <input id="epochs" name="param1value" type="number" onchange="retrieveCurrentSelection()"
+                            name="epochs" id="epochs" class="form-control" value="1" min="1">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <label class="col-form-label">Learning Rate:</label>
-                        <input id="learningRate" name="param2value" type="number" onchange="retrieveCurrentSelection()" name="learningRate" id="learningRate" class="form-control" value="0.0001"
-                            step="0.0001" min="0">
+                        <input id="learningRate" name="param2value" type="number" onchange="retrieveCurrentSelection()"
+                            name="learningRate" id="learningRate" class="form-control" value="0.0001" step="0.0001"
+                            min="0">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <label class="col-form-label">Limit dataset size:</label>
-                        <select id="limitDatasetSize" name="param3value" id="limitDatasetSize" onchange="retrieveCurrentSelection()" name="limitDatasetSize" class="form-select" required>
+                        <select id="limitDatasetSize" name="param3value" id="limitDatasetSize"
+                            onchange="retrieveCurrentSelection()" name="limitDatasetSize" class="form-select" required>
                             <option value="True">True</option>
                             <option value="False">False</option>
                         </select>
@@ -184,18 +187,30 @@
                 <div class="row">
                     <div class="col">
                         <label class="col-form-label">Per-device training batch size:</label>
-                        <input id="trainingBatchSize" name="param4value" type="number" onchange="retrieveCurrentSelection()" name="trainingBatchSize" id="trainingBatchSize" class="form-control"
-                            value="8" min="1">
+                        <input id="trainingBatchSize" name="param4value" type="number"
+                            onchange="retrieveCurrentSelection()" name="trainingBatchSize" id="trainingBatchSize"
+                            class="form-control" value="8" min="1">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <label class="col-form-label">Per-device eval batch size:</label>
-                        <input id="evalBatchSize" name="param5value" type="number" onchange="retrieveCurrentSelection()" name="evalBatchSize" id="evalBatchSize" class="form-control" value="8"
-                            min="1">
+                        <input id="evalBatchSize" name="param5value" type="number" onchange="retrieveCurrentSelection()"
+                            name="evalBatchSize" id="evalBatchSize" class="form-control" value="8" min="1">
                     </div>
                 </div>
-                <!-- load parameters here based on model selected-->
+                <br>
+                <!-- PEFT config -->
+                <label for="peft" class="form-label">PEFT</label>
+                <div class="row">
+                    <div class="col">
+                        <label class="col-form-label">PEFT type:</label>
+                        <select id="peftType" name="peftType" name="peftType" id="peftType" class="form-control">
+                            <option value="None" selected>None</option>
+                            <option value="LORA">LORA</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
         <input type="submit" class="btn btn-primary" value="Submit">

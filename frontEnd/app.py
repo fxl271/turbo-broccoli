@@ -33,17 +33,19 @@ def homepage():
         paramLabels = [0] * (paramNum)
         paramTag = [0] * (paramNum)
 
-        # for i in range(1, paramNum):
-        #    paramLabels[i] = request.get['param' + str(i) + 'label']
-
-        # print(paramLabels)
-
         for i in range(1, paramNum + 1):
             paramTag[i - 1] = request.values["param" + str(i) + "value"]
-
-        # paramTag = request.values['param1value']
         print(paramTag)
-        mlInstance = MLThing(modelTag, datasetTag, paramTag)
+
+        peftType = request.form["peftType"]
+        print(peftType)
+
+        mlInstance = None
+        if peftType == "None":
+            mlInstance = MLThing(modelTag, datasetTag, paramTag)
+        else:
+            mlInstance = MLThing(modelTag, datasetTag, paramTag, peftType=peftType)
+
         output = pd.read_csv("emissions.csv").iloc[-1]
 
         output["duration"] = str(datetime.timedelta(seconds=output["duration"]))
@@ -52,6 +54,7 @@ def homepage():
             model=modelTag,
             dataset=datasetTag,
             parameters=paramTag,
+            peftType=peftType,
             output=output,
         )
 
@@ -75,12 +78,14 @@ def results():
     )
 
 
+# send the most recent result from emissions.csv (new runs are appended every time training is done, so emissions.csv contains entire history of runs)
 @app.route("/emissions.csv", methods=["GET"])
 def emissions():
     with open("emissions.csv", "rb") as f:
         lines = f.readlines()
+        first_line = lines[0]
         last_line = lines[-1]
-        file_obj = io.BytesIO(last_line)
+        file_obj = io.BytesIO(first_line + last_line)
         return send_file(file_obj, download_name="emissions.csv", mimetype="text/csv")
     # return send_file("emissions.csv")
 
