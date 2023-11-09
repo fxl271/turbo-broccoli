@@ -6,7 +6,7 @@ from transformers import Trainer
 from transformers import TrainerCallback
 from transformers import AutoModelForSequenceClassification
 from codecarbon import track_emissions
-from peft import PeftModelForSequenceClassification, LoraConfig
+from peft import PeftModelForSequenceClassification, LoraConfig, IA3Config
 import time
 
 
@@ -126,17 +126,27 @@ def train_model_peft(
     per_device_train_batch_size=8,
     per_device_eval_batch_size=8,
     num_train_epochs=2,
+    peftType="LoRA",
 ):
-    peft_config = LoraConfig(
-        task_type="SEQ_CLS",
-        inference_mode=False,
-        r=8,
-        lora_alpha=16,
-        lora_dropout=0.1,
-        target_modules=["q_lin", "v_lin"],
-    )
+    peft_config = None
+    if peftType == "LoRA":
+        peft_config = LoraConfig(
+            task_type="SEQ_CLS",
+            inference_mode=False,
+            r=8,
+            lora_alpha=16,
+            lora_dropout=0.1,
+            target_modules=["q_lin", "v_lin"],
+        )
+    elif peftType == "IA3":
+        peft_config = IA3Config(
+            task_type="SEQ_CLS",
+            target_modules=["q_lin", "v_lin", "out_lin"],
+            feedforward_modules=["out_lin"],
+        )
 
     model = AutoModelForSequenceClassification.from_pretrained(model_name)
+    # print(model)
     peft_model = PeftModelForSequenceClassification(model, peft_config)
 
     trainer = get_trainer(

@@ -10,7 +10,7 @@ class MLThing:
         self.params = params
         self.peft_type = peftType
 
-        if peftType == "LoRA":
+        if peftType is not None:
             train_model_peft(
                 model_name=self.mlModel,
                 dataset_name=self.dataset,
@@ -20,6 +20,7 @@ class MLThing:
                 per_device_train_batch_size=self.params[3],
                 per_device_eval_batch_size=self.params[4],
                 num_train_epochs=self.params[0],
+                peftType=self.peft_type,
             )
         else:
             train_model(
