@@ -114,7 +114,7 @@
                 <div class="mb-3">
                     <div class="row">
                         <label for="model" class="form-label">Model:</label>
-                        <div class="col">
+                        <div class="col-4">
                             <select id="modelDropdown" name="modelDropdown" class="form-select"
                                 aria-label="Model select" onchange="retrieveCurrentSelection()" required>
                                 <option value="" selected disabled hidden>Select model</option>
@@ -123,21 +123,20 @@
                                 <option value="testModel_3">testModel_3</option>
                             </select>
                         </div>
-                        <div class="col">
+                        <div class="col-5">
                             <input type="text" name="modelTextbox" id="modelURL" class="form-control"
                                 placeholder="Enter Model URL">
                         </div>
-                        <div class="col">
-                            <input type="button" name="modelTextbox" onclick="retrieveModel()" class="btn btn-primary"
-                                value="Retrieve Model">
+                        <div class="col-3">
+                            <input type="button btn-block" name="modelTextbox" onclick="retrieveModel()"
+                                class="btn btn-primary" value="Retrieve Model">
                         </div>
                     </div>
-
                 </div>
                 <div class="mb-3">
                     <div class="row">
                         <label for="dataset" class="form-label">Dataset:</label>
-                        <div class="col">
+                        <div class="col-4">
                             <select id="datasetDropdown" name="datasetDropdown" class="form-select"
                                 aria-label="Dataset select" onchange="retrieveCurrentSelection()" required>
                                 <option value="" selected disabled hidden>Select dataset</option>
@@ -146,13 +145,30 @@
                                 <option value="testDataset_3">testDataset_3</option>
                             </select>
                         </div>
-                        <div class="col">
+                        <div class="col-5">
                             <input type="text" name="datasetTextbox" id="datasetURL" class="form-control"
                                 placeholder="Enter Dataset URL">
                         </div>
-                        <div class="col">
-                            <input type="button" name="datasetTextbox" onclick="retrieveDataset()"
+                        <div class="col-3">
+                            <input type="button btn-block" name="datasetTextbox" onclick="retrieveDataset()"
                                 class="btn btn-primary" value="Retrieve Dataset">
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="row">
+                        <label for="taskType" class="form-label">Task type:</label>
+                        <div class="col">
+                            <select id="taskType" name="taskType" class="form-select" aria-label="Task type" required>
+                                <option value="" selected disabled hidden>Select task type</option>
+                                <option value="SEQ_CLS">Sequence classification</option>
+                                <!-- not implemented yet -->
+                                <option value="SEQ_2_SEQ_LM">Sequence-to-sequence language modeling</option>
+                                <option value="CAUSAL_LM">Causal language modeling</option>
+                                <option value="TOKEN_CLS">Token classification</option>
+                                <option value="QUESTION_ANS">Question answering</option>
+                                <option value="FEATURE_EXTRACTION">Feature extraction</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -205,10 +221,18 @@
                 <div class="row">
                     <div class="col">
                         <label class="col-form-label">PEFT type:</label>
-                        <select id="peftType" name="peftType" name="peftType" id="peftType" class="form-control">
+                        <select id="peftType" name="peftType" name="peftType" id="peftType" class="form-select">
                             <option value="None" selected>None</option>
                             <option value="LoRA">LoRA</option>
                             <option value="IA3">IA3</option>
+                            <!-- not implemented yet -->
+                            <option value="PROMPT_TUNING">Prompt tuning</option>
+                            <option value="MULTITASK_PROMPT_TUNING">Multitask prompt tuning</option>
+                            <option value="P_TUNING">P-tuning</option>
+                            <option value="ADALORA">ADALORA</option>
+                            <option value="ADAPTION_PROMPT">ADAPTION_PROMPT</option>
+                            <option value="LOHA">LOHA</option>
+                            <option value="LOKR">LOKR</option>
                         </select>
                     </div>
                 </div>
