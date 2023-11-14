@@ -159,3 +159,4 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 frontEnd/path/to/save/folder/runs/Nov09_12-41-02_LA-FLOR/events.out.tfevents.1699551700.LA-FLOR.8226.0
+frontEnd/path/to/save/folder/runs/Nov14_12-42-25_LA-FLOR/events.out.tfevents.1699983764.LA-FLOR.22645.0

@@ -93,8 +93,9 @@
         function retrieveCurrentSelection() {
             var selectedModel = stringIsNot("Select model", document.getElementById("modelDropdown").value);
             var selectedDataset = stringIsNot("Select dataset", document.getElementById("datasetDropdown").value);
-
-            console.log("MODEL: " + selectedModel + "\tDATASET: " + selectedDataset);
+            var selectedSubset = stringIsNot("", document.getElementById("subsetName").value);
+            console.log("TEST: " + document.getElementById("subsetName").value);
+            console.log("MODEL: " + selectedModel + "\tDATASET: " + selectedDataset + "\tSUBSET: " + selectedSubset);
         }
 
         // const source = new EventSource("/output");
@@ -154,6 +155,13 @@
                             <input type="button" name="datasetTextbox" onclick="retrieveDataset()"
                                 class="btn btn-primary" value="Retrieve Dataset">
                         </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="row">
+                        <label for="subset" class="form-label">Subset (if required):</label>
+                        <input type="text" name="subsetTextbox" id="subsetName" class="form-control"
+                               onchange="retrieveCurrentSelection();" placeholder="Enter Subset Name">
                     </div>
                 </div>
             </div>
