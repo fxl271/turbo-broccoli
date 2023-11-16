@@ -1,25 +1,20 @@
-import sys
 import io
 import pandas as pd
 import datetime
 from flask import (
     Flask,
-    Response,
     render_template,
     request,
-    redirect,
-    stream_with_context,
     send_file,
-    url_for,
-    jsonify
+    jsonify,
 )
 from backend import *
 
+# flask --app app run --debug
 app = Flask(__name__)
 
-
-
 mlInstance = MLThing()
+
 
 @app.route("/", methods=["GET", "POST"])
 def homepage():
@@ -44,14 +39,17 @@ def homepage():
         peftType = request.form["peftType"]
         print(peftType)
 
-        #print(LabelArray)
-        #print(ParamArray)
+        # print(LabelArray)
+        # print(ParamArray)
 
-        mlInstance = None
         if peftType == "None":
-            mlInstance.setVars(modelTag, datasetTag, paramTag) #= MLThing(modelTag, datasetTag, paramTag)
+            mlInstance.setVars(
+                modelTag, datasetTag, paramTag
+            )  # = MLThing(modelTag, datasetTag, paramTag)
         else:
-            mlInstance.setVars(modelTag, datasetTag, paramTag, peftType=peftType) #= MLThing(modelTag, datasetTag, paramTag, peftType=peftType)
+            mlInstance.setVars(
+                modelTag, datasetTag, paramTag, peftType=peftType
+            )  # = MLThing(modelTag, datasetTag, paramTag, peftType=peftType)
 
         mlInstance.run()
         output = pd.read_csv("emissions.csv").iloc[-1]
@@ -98,27 +96,24 @@ def emissions():
         return send_file(file_obj, download_name="emissions.csv", mimetype="text/csv")
     # return send_file("emissions.csv")
 
-# flask --app app run --debug   
 
-
-@app.route('/fetchLabels', methods=['POST']) 
-def process_labels(): 
-    data = request.json['LabelArray'] 
-    #result = sum(data) 
+@app.route("/fetchLabels", methods=["POST"])
+def process_labels():
+    data = request.json["LabelArray"]
+    # result = sum(data)
     mlInstance.setLbArray(data)
-    
-    #print(data)
-    #print(result)
-    return jsonify({'result': 5}) 
 
-@app.route('/fetchParamValues', methods=['POST']) 
-def process_params(): 
-    data = request.json['ParamValues'] 
-    #result = sum(data) 
+    # print(data)
+    # print(result)
+    return jsonify({"result": 5})
+
+
+@app.route("/fetchParamValues", methods=["POST"])
+def process_params():
+    data = request.json["ParamValues"]
+    # result = sum(data)
     mlInstance.setPArray(data)
-    #ParamArray = data
-    #print(data)
-    #print(result)
-    return jsonify({'result': 5}) 
-
-# flask --app app run --debug
+    # ParamArray = data
+    # print(data)
+    # print(result)
+    return jsonify({"result": 5})

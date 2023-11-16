@@ -4,7 +4,6 @@ from TrainApp import train_model, train_model_peft
 
 
 class MLThing:
-    
     def __init__(self):
         pass
 
@@ -13,17 +12,17 @@ class MLThing:
         self.dataset = dataset
         self.params = params
         self.peft_type = peftType
-        
+
     def setLbArray(self, lbArray):
         self.lbArray = lbArray
         print(self.lbArray)
-        
+
     def setPArray(self, pArray):
         self.pArray = pArray
         print(self.pArray)
 
     def run(self):
-        if self.peftType is not None:
+        if self.peft_type is not None:
             train_model_peft(
                 model_name=self.mlModel,
                 dataset_name=self.dataset,
