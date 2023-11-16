@@ -31,6 +31,10 @@ def homepage():
         # value = tag_lookup(tag)
         print(datasetTag)
 
+        # subset name
+        subsetTag = request.form["subsetTextbox"]
+        print(subsetTag)
+
         # Dependent on number of params REMEMBER TO IMPLEMENT LATER
 
         paramNum = 5
