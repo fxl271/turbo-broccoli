@@ -1,49 +1,40 @@
 from TrainApp import train_model, train_model_peft
 
-#train_model("distilbert-base-uncased", "rotton_tomatos")
+# train_model("distilbert-base-uncased", "rotten_tomatoes")
+
 
 class MLThing:
-    def __init__(self, mlModel, dataset, params):
+    def __init__(self, mlModel, dataset, params, peftType=None):
         self.mlModel = mlModel
         self.dataset = dataset
         self.params = params
-        
-        #train_model(self.mlModel, self.dataset)
-        
-        train_model(model_name=self.mlModel, 
-                    dataset_name=self.dataset, 
-                    limit_size=eval(params[2]),
-                    output_dir="path/to/save/folder/", 
-                    learning_rate=self.params[1], 
-                    per_device_train_batch_size=self.params[3], 
-                    per_device_eval_batch_size=self.params[4], 
-                    num_train_epochs=self.params[0])
-        #train_model("bigscience/bloomz-560m", "bigscience/xP3")
-        
-    def fetchParamList(self, mlModel, dataset):
-        match (mlModel):
-            case 0:
-                return "k"
-        
-    def tuple(self):
-        pairs = [("a", 1), ("b", 2), ("c", 3)]
-        #(label, cavalue)
-        for a, b in pairs:
-            print(a, b)
-            
-    def fetchParamPreset(self, trainingType):
-        #returns dictionary
-        match (trainingType):
-            case 0:
-                return ""
-        
-        
-            
-        
-    
-#https://huggingface.co/distilbert-base-uncased
-#https://huggingface.co/datasets/rotten_tomatoes
+        self.peft_type = peftType
 
-    
-    
+        if peftType is not None:
+            train_model_peft(
+                model_name=self.mlModel,
+                dataset_name=self.dataset,
+                limit_size=eval(params[2]),
+                output_dir="path/to/save/folder/",
+                learning_rate=self.params[1],
+                per_device_train_batch_size=self.params[3],
+                per_device_eval_batch_size=self.params[4],
+                num_train_epochs=self.params[0],
+                peftType=self.peft_type,
+            )
+        else:
+            train_model(
+                model_name=self.mlModel,
+                dataset_name=self.dataset,
+                limit_size=eval(params[2]),
+                output_dir="path/to/save/folder/",
+                learning_rate=self.params[1],
+                per_device_train_batch_size=self.params[3],
+                per_device_eval_batch_size=self.params[4],
+                num_train_epochs=self.params[0],
+            )
+        # train_model("bigscience/bloomz-560m", "bigscience/xP3")
 
+
+# https://huggingface.co/distilbert-base-uncased
+# https://huggingface.co/datasets/rotten_tomatoes

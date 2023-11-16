@@ -12,5 +12,6 @@ python -m pip install --user pandas
 python -m pip install --user transformers
 python -m pip install --user datasets
 python -m pip install --user codecarbon
+python -m pip install --user peft
 
 echo "Finished setup"

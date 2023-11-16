@@ -6,10 +6,21 @@ from transformers import Trainer
 from transformers import TrainerCallback
 from transformers import AutoModelForSequenceClassification
 from codecarbon import track_emissions
-from peft import PeftModelForSequenceClassification, get_peft_config
+from peft import PeftModelForSequenceClassification, LoraConfig, IA3Config
 import time
 
-def get_trainer(model, model_name, dataset_name, limit_size=True, output_dir="path/to/save/folder/", learning_rate=2e-5,per_device_train_batch_size=8,per_device_eval_batch_size=8, num_train_epochs=2):
+
+def get_trainer(
+    model,
+    model_name,
+    dataset_name,
+    limit_size=True,
+    output_dir="path/to/save/folder/",
+    learning_rate=2e-5,
+    per_device_train_batch_size=8,
+    per_device_eval_batch_size=8,
+    num_train_epochs=2,
+):
     training_args = TrainingArguments(
         output_dir,
         learning_rate,
@@ -23,8 +34,10 @@ def get_trainer(model, model_name, dataset_name, limit_size=True, output_dir="pa
     def tokenize_dataset(dataset):
         return tokenizer(dataset["text"])
 
-    if (limit_size):
-        dataset = load_dataset(dataset_name)['train'].train_test_split(train_size=400, test_size=100)
+    if limit_size:
+        dataset = load_dataset(dataset_name)["train"].train_test_split(
+            train_size=400, test_size=100
+        )
     else:
         dataset = load_dataset(dataset_name)
 
@@ -72,39 +85,84 @@ def get_trainer(model, model_name, dataset_name, limit_size=True, output_dir="pa
         eval_dataset=dataset["test"],
         tokenizer=tokenizer,
         data_collator=data_collator,
-        callbacks=[My_Callback_Transformers()]
+        callbacks=[My_Callback_Transformers()],
     )
     return trainer
 
+
 @track_emissions(project_name="train_model")
-def train_model(model_name, dataset_name, limit_size=True, output_dir="path/to/save/folder/", learning_rate=2e-5,per_device_train_batch_size=8,per_device_eval_batch_size=8, num_train_epochs=2):
+def train_model(
+    model_name,
+    dataset_name,
+    limit_size=True,
+    output_dir="path/to/save/folder/",
+    learning_rate=2e-5,
+    per_device_train_batch_size=8,
+    per_device_eval_batch_size=8,
+    num_train_epochs=2,
+):
     model = AutoModelForSequenceClassification.from_pretrained(model_name)
-    trainer = get_trainer(model, model_name, dataset_name, limit_size, output_dir, learning_rate,per_device_train_batch_size,per_device_eval_batch_size, num_train_epochs)
+    trainer = get_trainer(
+        model,
+        model_name,
+        dataset_name,
+        limit_size,
+        output_dir,
+        learning_rate,
+        per_device_train_batch_size,
+        per_device_eval_batch_size,
+        num_train_epochs,
+    )
     trainer.train()
+
 
 @track_emissions(project_name="train_model_peft")
-def train_model_peft(model_name, dataset_name, limit_size=True, output_dir="path/to/save/folder/", learning_rate=2e-5,per_device_train_batch_size=8,per_device_eval_batch_size=8, num_train_epochs=2):
-    config = {
-        "peft_type": "PREFIX_TUNING",
-        "task_type": "SEQ_CLS",
-        "inference_mode": False,
-        "num_virtual_tokens": 20,
-        "token_dim": 768,
-        "num_transformer_submodules": 1,
-        "num_attention_heads": 12,
-        "num_layers": 12,
-        "encoder_hidden_size": 768,
-        "prefix_projection": False,
-    }
-    peft_config = get_peft_config(config)
+def train_model_peft(
+    model_name,
+    dataset_name,
+    limit_size=True,
+    output_dir="path/to/save/folder/",
+    learning_rate=2e-5,
+    per_device_train_batch_size=8,
+    per_device_eval_batch_size=8,
+    num_train_epochs=2,
+    peftType="LoRA",
+):
+    peft_config = None
+    if peftType == "LoRA":
+        peft_config = LoraConfig(
+            task_type="SEQ_CLS",
+            inference_mode=False,
+            r=8,
+            lora_alpha=16,
+            lora_dropout=0.1,
+            target_modules=["q_lin", "v_lin"],
+        )
+    elif peftType == "IA3":
+        peft_config = IA3Config(
+            task_type="SEQ_CLS",
+            target_modules=["q_lin", "v_lin", "out_lin"],
+            feedforward_modules=["out_lin"],
+        )
 
     model = AutoModelForSequenceClassification.from_pretrained(model_name)
+    # print(model)
     peft_model = PeftModelForSequenceClassification(model, peft_config)
 
-    trainer = get_trainer(peft_model, model_name, dataset_name, limit_size, output_dir, learning_rate,per_device_train_batch_size,per_device_eval_batch_size, num_train_epochs)
+    trainer = get_trainer(
+        peft_model,
+        model_name,
+        dataset_name,
+        limit_size,
+        output_dir,
+        learning_rate,
+        per_device_train_batch_size,
+        per_device_eval_batch_size,
+        num_train_epochs,
+    )
     trainer.train()
 
-    
-#train_model("distilbert-base-uncased", "rotton_tomatos")
-    
-#train_model("bigscience/bloomz-560m", "bigscience/xP3")
+
+# train_model("distilbert-base-uncased", "rotton_tomatos")
+
+# train_model("bigscience/bloomz-560m", "bigscience/xP3")
