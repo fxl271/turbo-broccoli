@@ -19,7 +19,27 @@ class MLThing:
                     per_device_eval_batch_size=self.params[4], 
                     num_train_epochs=self.params[0])
         #train_model("bigscience/bloomz-560m", "bigscience/xP3")
-    
+        
+    def fetchParamList(self, mlModel, dataset):
+        match (mlModel):
+            case 0:
+                return "k"
+        
+    def tuple(self):
+        pairs = [("a", 1), ("b", 2), ("c", 3)]
+        #(label, cavalue)
+        for a, b in pairs:
+            print(a, b)
+            
+    def fetchParamPreset(self, trainingType):
+        #returns dictionary
+        match (trainingType):
+            case 0:
+                return ""
+        
+        
+            
+        
     
 #https://huggingface.co/distilbert-base-uncased
 #https://huggingface.co/datasets/rotten_tomatoes

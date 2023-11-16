@@ -1,10 +1,13 @@
 import sys
 import pandas as pd
 import datetime
-from flask import Flask, Response, render_template, request, redirect, stream_with_context, send_file, url_for
+from flask import Flask, Response, render_template, request, redirect, stream_with_context, send_file, url_for, jsonify
 from backend import *
 
 app = Flask(__name__)
+
+ParamLabels = ""
+ParamValues = ""
 
 @app.route("/", methods = ['GET','POST'])
 def homepage():
@@ -52,9 +55,27 @@ def results():
     output = pd.read_csv("emissions.csv")
     output['duration'] = str(datetime.timedelta(seconds=output['duration'].iloc[0]))
     return render_template('results.html', model=model, dataset=dataset, parameters=parameters, output=output)
+  
 
 @app.route("/emissions.csv", methods=['GET'])
 def emissions():
     return send_file('emissions.csv')
 
 # flask --app app run --debug   
+
+
+@app.route('/fetchLabels', methods=['POST']) 
+def process_labels(): 
+    data = request.json['LabelArray'] 
+    #result = sum(data) 
+    print(data)
+    #print(result)
+    return jsonify({'result': 5}) 
+
+@app.route('/fetchParamValues', methods=['POST']) 
+def process_params(): 
+    data = request.json['ParamValues'] 
+    #result = sum(data) 
+    print(data)
+    #print(result)
+    return jsonify({'result': 5}) 

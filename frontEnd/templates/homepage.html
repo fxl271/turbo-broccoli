@@ -97,6 +97,131 @@
             console.log("MODEL: " + selectedModel + "\tDATASET: " + selectedDataset);
         }
 
+        //Param functions
+        function changeParams() {  
+            //const data = [1, 2, 3, 4, 5]; 
+            //const bleh = ["bleh", "bleh", 2];
+            LabelArray = [[["option1", "int"], ["option2", "string"], ["option3", "float"]], [["option1A", "bool"]], [["option1B", "int"]], [["Option1C", "string"]]]; 
+            
+            //const LabelDatatypeArray = [
+            //Called whenever dropdown menu of trianing types is added
+            //https://stackoverflow.com/questions/1115310/how-can-i-add-a-class-to-a-dom-element-in-javascript
+            
+            //Remove children from params
+            var params = document.getElementById("params");
+
+            //var child = params.lastElementChild;  
+            params.innerHTML = "";
+            //while (child) { 
+            //    params.removeChild(child); 
+            //    child = params.lastElementChild; 
+            //}
+            var trainingRef = document.getElementById("TrainingType");
+
+            var trainingSelect = trainingRef.selectedIndex;
+            for (let i = 0; i < LabelArray[trainingSelect].length; i++) {
+                var newRow = newDiv(LabelArray[trainingSelect][i][0], LabelArray[trainingSelect][i][1]);
+                params.appendChild(newRow);
+            }
+            console.log("Change Params");
+
+            //var newDiv = document.createElement("div");
+            //var newLabel = document.createElement("Label");
+            //var newInput = document.createElement("Input");
+            //newDiv.appendChild(newLabel);
+            //newDiv.appendChild(newInput);
+            //newLabel.innerHTML = "bleh";
+            //params.appendChild(newDiv);
+            //params.appendChild(newDiv("bleh"));
+
+            //<label class="col-form-label">Per-device training batch size:</label>
+             //          <input id="trainingBatchSize" name="param4value" type="number" onchange="retrieveCurrentSelection()" name="trainingBatchSize" id="trainingBatchSize" class="form-control"
+              //              value="8" min="1">
+
+            fetch('/fetchLabels', { 
+            method: 'POST', 
+            headers: { 
+                'Content-Type': 'application/json'
+            }, 
+            body: JSON.stringify({LabelArray: LabelArray}) 
+            }) 
+            .then(response => response.text()) 
+            .then(result => { 
+            console.log(result); 
+            }) 
+            .catch(error => { 
+            console.error('Error:', error); 
+            }); 
+    
+        }
+   
+        function newDiv(labelName, dataType) {
+            var newDiv = document.createElement("div");
+            var newLabel = document.createElement("Label");
+            var newInput; 
+
+            switch (dataType) {
+                case "int":
+                case "float":
+                    newInput = document.createElement("Input");
+                    newInput.type = "number"
+                    newInput.value = 0;
+                    break;
+                case "string":
+                    newInput = document.createElement("Input");
+                    break;
+                case "bool":
+                    newInput = document.createElement("Select");
+                    var op1 = document.createElement("Option");
+                    var op2 = document.createElement("Option");
+                    op1.value = "True";
+                    op1.text = "True";
+                    op2.value = "False";
+                    op2.text = "False";
+                    newInput.appendChild(op1);
+                    newInput.appendChild(op2);
+                    break;
+            }
+                
+            newDiv.appendChild(newLabel);
+            newDiv.appendChild(newInput);
+            newLabel.innerHTML = labelName;
+            newInput.id = labelName;
+            newInput.class="form-control"
+            newInput.setAttribute("onchange", "changeParamValues()");
+            return newDiv;
+        }
+
+        function changeParamValues() {
+            
+
+            var index = document.getElementById("TrainingType").selectedIndex;
+
+            ParamValues = new Array(LabelArray[index].length);
+
+            for (let i = 0; i < LabelArray[index].length; i++) {
+                ParamValues[i] = document.getElementById(LabelArray[index][i][0]).value;
+                //var newRow = newDiv(LabelArray[trainingSelect][i][0], LabelArray[trainingSelect][i][1]);
+                //params.appendChild(newRow);
+            }
+
+            fetch('/fetchParamValues', { 
+                method: 'POST', 
+                headers: { 
+                    'Content-Type': 'application/json'
+                }, 
+                body: JSON.stringify({ParamValues : ParamValues}) 
+                }) 
+                .then(response => response.text()) 
+                .then(result => { 
+                console.log(result); 
+                }) 
+                .catch(error => { 
+                console.error('Error:', error); 
+                }); 
+        }
+
+
         // const source = new EventSource("/output");
         // source.onmessage = function (event) {
         //     console.log('hi')
@@ -134,6 +259,7 @@
                     </div>
 
                 </div>
+                
                 <div class="mb-3">
                     <div class="row">
                         <label for="dataset" class="form-label">Dataset:</label>
@@ -196,6 +322,19 @@
                     </div>
                 </div>
                 <!-- load parameters here based on model selected-->
+            </div>
+            
+            <div class="col">
+                <label class="col-form-label">Training type</label>
+                <select id="TrainingType" onchange="changeParams()" class="form-select" required>
+                    <option value="t1">t1</option>
+                    <option value="t2">t2</option>
+                    <option value="t3">t3</option>
+                    <option value="t4">t4</option>
+                </select>
+            </div>
+            <div class="col" id="params" >
+                
             </div>
         </div>
         <input type="submit" class="btn btn-primary" value="Submit">
