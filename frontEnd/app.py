@@ -33,7 +33,8 @@ def homepage():
 
         # subset name
         subsetTag = request.form["subsetTextbox"]
-        print(subsetTag)
+        if subsetTag == "None":
+            print(subsetTag)
 
         # Dependent on number of params REMEMBER TO IMPLEMENT LATER
 
