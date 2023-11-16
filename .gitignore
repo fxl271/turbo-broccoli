@@ -161,3 +161,4 @@ cython_debug/
 frontEnd/mlruns/
 frontEnd/path/to/save/folder/
 frontEnd/path/to/save/folder/emissions.csv
+emissions.csv
