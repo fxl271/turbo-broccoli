@@ -23,7 +23,7 @@ class MLThing:
         print(self.pArray)
 
     def run(self):
-        if self.peftType is not None:
+        if self.peft_type is not None:
             if self.subset is not None:
                 train_model_peft(
                     model_name=self.mlModel,
