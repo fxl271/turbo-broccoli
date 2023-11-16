@@ -18,6 +18,9 @@ from backend import *
 app = Flask(__name__)
 
 
+
+mlInstance = MLThing()
+
 @app.route("/", methods=["GET", "POST"])
 def homepage():
     if request.method == "POST":
@@ -41,12 +44,16 @@ def homepage():
         peftType = request.form["peftType"]
         print(peftType)
 
+        #print(LabelArray)
+        #print(ParamArray)
+
         mlInstance = None
         if peftType == "None":
-            mlInstance = MLThing(modelTag, datasetTag, paramTag)
+            mlInstance.setVars(modelTag, datasetTag, paramTag) #= MLThing(modelTag, datasetTag, paramTag)
         else:
-            mlInstance = MLThing(modelTag, datasetTag, paramTag, peftType=peftType)
+            mlInstance.setVars(modelTag, datasetTag, paramTag, peftType=peftType) #= MLThing(modelTag, datasetTag, paramTag, peftType=peftType)
 
+        mlInstance.run()
         output = pd.read_csv("emissions.csv").iloc[-1]
 
         output["duration"] = str(datetime.timedelta(seconds=output["duration"]))
@@ -98,7 +105,9 @@ def emissions():
 def process_labels(): 
     data = request.json['LabelArray'] 
     #result = sum(data) 
-    print(data)
+    mlInstance.setLbArray(data)
+    
+    #print(data)
     #print(result)
     return jsonify({'result': 5}) 
 
@@ -106,7 +115,9 @@ def process_labels():
 def process_params(): 
     data = request.json['ParamValues'] 
     #result = sum(data) 
-    print(data)
+    mlInstance.setPArray(data)
+    #ParamArray = data
+    #print(data)
     #print(result)
     return jsonify({'result': 5}) 
 

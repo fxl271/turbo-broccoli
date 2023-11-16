@@ -4,17 +4,30 @@ from TrainApp import train_model, train_model_peft
 
 
 class MLThing:
-    def __init__(self, mlModel, dataset, params, peftType=None):
+    
+    def __init__(self):
+        pass
+
+    def setVars(self, mlModel, dataset, params, peftType=None):
         self.mlModel = mlModel
         self.dataset = dataset
         self.params = params
         self.peft_type = peftType
+        
+    def setLbArray(self, lbArray):
+        self.lbArray = lbArray
+        print(self.lbArray)
+        
+    def setPArray(self, pArray):
+        self.pArray = pArray
+        print(self.pArray)
 
-        if peftType is not None:
+    def run(self):
+        if self.peftType is not None:
             train_model_peft(
                 model_name=self.mlModel,
                 dataset_name=self.dataset,
-                limit_size=eval(params[2]),
+                limit_size=eval(self.params[2]),
                 output_dir="path/to/save/folder/",
                 learning_rate=self.params[1],
                 per_device_train_batch_size=self.params[3],
@@ -26,7 +39,7 @@ class MLThing:
             train_model(
                 model_name=self.mlModel,
                 dataset_name=self.dataset,
-                limit_size=eval(params[2]),
+                limit_size=eval(self.params[2]),
                 output_dir="path/to/save/folder/",
                 learning_rate=self.params[1],
                 per_device_train_batch_size=self.params[3],
