@@ -11,6 +11,7 @@ from flask import (
     stream_with_context,
     send_file,
     url_for,
+    jsonify
 )
 from backend import *
 
@@ -90,5 +91,23 @@ def emissions():
         return send_file(file_obj, download_name="emissions.csv", mimetype="text/csv")
     # return send_file("emissions.csv")
 
+# flask --app app run --debug   
+
+
+@app.route('/fetchLabels', methods=['POST']) 
+def process_labels(): 
+    data = request.json['LabelArray'] 
+    #result = sum(data) 
+    print(data)
+    #print(result)
+    return jsonify({'result': 5}) 
+
+@app.route('/fetchParamValues', methods=['POST']) 
+def process_params(): 
+    data = request.json['ParamValues'] 
+    #result = sum(data) 
+    print(data)
+    #print(result)
+    return jsonify({'result': 5}) 
 
 # flask --app app run --debug
