@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script type="text/javascript">
+        
         //Converts a valid in_url String into a URL object and returns a split URL with each section of the URL retrievable via array indexing
         function splitURL(in_url) {
             return new URL(in_url).pathname.split('/');
@@ -101,8 +102,73 @@
         function changeParams() {
             //const data = [1, 2, 3, 4, 5]; 
             //const bleh = ["bleh", "bleh", 2];
-            LabelArray = [[["option1", "int"], ["option2", "string"], ["option3", "float"]], [["option1A", "bool"]], [["option1B", "int"]], [["Option1C", "string"]]];
-
+            LabelArray = [
+                [
+                    //train_text_classification
+                    ["label_names", "list"], 
+                    ["keys", "list"],
+                    ["train_size", "int"],
+                    ["test_size", "int"]
+                ], 
+                [
+                    //train_language_model_casual
+                    ["block_size", "int"],
+                    ["key", "string"],
+                    ["train_size", "int"],
+                    ["test_size", "int"]
+                ], 
+                [
+                    //train_language_model_masked
+                    ["block_size", "int"],
+                    ["key", "string"],
+                    ["train_size", "int"],
+                    ["test_size", "int"]
+                ], 
+                [
+                    //traing_token_classification
+                    ["label_all_tokens", "bool"],
+                    ["key", "string"],
+                    ["tags", "string"],
+                    ["train_size", "int"],
+                    ["test_size", "int"]
+                    
+                ],
+                [
+                    //train_extractive_qa
+                    ["max_length", "int"],
+                    ["doc_stride", "int"],
+                    ["context", "string"],
+                    ["question", "string"],
+                    ["answer", "string"],
+                    ["train_size", "int"],
+                    ["test_size", "int"]
+                ],
+                [
+                    //train_translation
+                    ["max_input_length", "int"],
+                    ["max_target_length", "int"],
+                    ["src_lang", "string"],
+                    ["target_lang", "string"],
+                    ["tokenizer_src", "string"],
+                    ["tokenizer_tgt", "string"],
+                    ["prefix", "string"],
+                    ["trans_pair", "string"],
+                    ["train_size", "int"],
+                    ["test_size", "int"]
+                ],
+                [
+                    //train_summarization
+                    ["add_prefix", "bool"],
+                    ["max_input_length", "int"],
+                    ["max_target_length", "int"],
+                    ["document", "string"],
+                    ["summary", "string"],
+                    ["train_size", "int"],
+                    ["test_size", "int"]
+                ]
+                    
+            ];
+            
             //const LabelDatatypeArray = [
             //Called whenever dropdown menu of trianing types is added
             //https://stackoverflow.com/questions/1115310/how-can-i-add-a-class-to-a-dom-element-in-javascript
@@ -119,6 +185,11 @@
             var trainingRef = document.getElementById("TrainingType");
 
             var trainingSelect = trainingRef.selectedIndex;
+
+            SelectedArray = [[trainingRef.selectedIndex, trainingRef.options[trainingRef.selectedIndex].text], LabelArray[trainingSelect]];
+            //SelectedArray[0] = [trainingRef.selectedIndex, trainingRef.options[trainingRef.selectedIndex].text];
+            //SelectedArray[1] = LabelArray[trainingSelect];
+
             for (let i = 0; i < LabelArray[trainingSelect].length; i++) {
                 var newRow = newDiv(LabelArray[trainingSelect][i][0], LabelArray[trainingSelect][i][1]);
                 params.appendChild(newRow);
@@ -143,7 +214,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ LabelArray: LabelArray })
+                body: JSON.stringify({ SelectedArray: SelectedArray })
             })
                 .then(response => response.text())
                 .then(result => {
@@ -181,26 +252,87 @@
                     newInput.appendChild(op1);
                     newInput.appendChild(op2);
                     break;
+                case "list":
+                    newInput = document.createElement("Input");
+                    newInput.type = "number";
+                    newInput.value = 0;
+
+                    //var newInput = document.createElement("Input")
+                    
+                    break;
             }
 
             newDiv.appendChild(newLabel);
             newDiv.appendChild(newInput);
             newLabel.innerHTML = labelName;
             newInput.id = labelName;
+            newInput.name = dataType;
             newInput.class = "form-control"
-            newInput.setAttribute("onchange", "changeParamValues()");
+            //newInput.setAttribute("onchange", "changeParamValues()");
+            newInput.setAttribute("onchange", "changeParamValues(this)");
+            /*if (dataType == "list") {
+                newInput.setAttribute("onchange", "listNumberSpecified(this)");
+            } else {
+                
+            }*/
             return newDiv;
         }
 
-        function changeParamValues() {
-
-
+        function changeParamValues(changedElement) {
             var index = document.getElementById("TrainingType").selectedIndex;
 
             ParamValues = new Array(LabelArray[index].length);
+            
+            if (changedElement.name == "list") {
+                //Reset
+                //while (changedElement.parentElement.lastElementChild) {
+
+                //    myNode.removeChild(m.lastElementChild);
+                //}
+                var childrenList = changedElement.parentElement.children;
+                for (var i = 0; i < childrenList.length; i++) {
+                    var tempChild = childrenList[i];
+                    console.log(tempChild.name);
+                    if (tempChild.name == "tempListInput") {
+                        tempChild.remove();
+                        i--;
+                    }
+                }
+
+
+                for (let i = 0; i < changedElement.value; i++) {
+                    tempInput = document.createElement("input");
+                    changedElement.parentElement.appendChild(tempInput);
+                    tempInput.setAttribute("onchange", "changeParamValues(this)");
+                    tempInput.id = changedElement.id + i.toString();
+                    tempInput.name = "tempListInput"
+                    
+                    console.log(tempInput.id);
+                }
+            }
 
             for (let i = 0; i < LabelArray[index].length; i++) {
-                ParamValues[i] = document.getElementById(LabelArray[index][i][0]).value;
+                //Checking for list stuff
+                console.log(LabelArray[index][i][0]);
+                if (LabelArray[index][i][1] == "list") {
+                    var listRef = document.getElementById(LabelArray[index][i][0]);
+                    if (listRef.value == 0) {
+                        //List has size of 0, aka value of onne
+                        ParamValues[i] = null;
+                    } else {
+                        var listValues = new Array(listRef.value);
+                        for (let j = 0; j < listRef.value; j++) {
+                            listValues[j] = document.getElementById(listRef.id + j.toString()).value;
+                            console.log(listRef.id + j.toString());
+                        }
+                        ParamValues[i] = listValues;
+                    }
+                } else {
+                    ParamValues[i] = document.getElementById(LabelArray[index][i][0]).value;
+                }
+                if (ParamValues[i] == "") {
+                    ParamValues[i] = null;
+                }
                 //var newRow = newDiv(LabelArray[trainingSelect][i][0], LabelArray[trainingSelect][i][1]);
                 //params.appendChild(newRow);
             }
@@ -221,6 +353,8 @@
                 });
         }
 
+        
+
 
         // const source = new EventSource("/output");
         // source.onmessage = function (event) {
@@ -228,11 +362,12 @@
         //     const data = JSON.parse(event.data);
         //     console.log(data);
         // }
+    
     </script>
 </head>
 
 <body data-bs-theme="dark">
-    <h1>title</h1>
+    <h1>Turbo Brocoli</h1>
     <form method="POST">
         <div class="row">
             <div class="col-5">
@@ -358,16 +493,18 @@
 
             <div class="col-3">
                 <label class="col-form-label">Training type</label>
-                <select id="TrainingType" onchange="changeParams()" class="form-select" required>
-                    <option value="t1">t1</option>
-                    <option value="t2">t2</option>
-                    <option value="t3">t3</option>
-                    <option value="t4">t4</option>
+                <select id="TrainingType" name="TrainingType" onchange="changeParams()" class="form-select" required>
+                    <option value="train_text_classification">train_text_classification</option>
+                    <option value="train_language_model_casual">train_language_model_casual</option>
+                    <option value="train_language_model_masked">train_language_model_masked</option>
+                    <option value="train_token_classification">train_token_classification</option>
+                    <option value="train_extractive_qa">train_extractive_qa</option>
+                    <option value="train_translation">train_translation</option>
+                    <option value="train_summarization">train_summarization</option>
                 </select>
-                <!-- </div>
-            <div class="col" id="params">
+                
+            <div class="form-label" id="params">
 
-            </div> -->
             </div>
             <div class="row mt-3">
                 <input type="submit" class="btn btn-primary" value="Submit">

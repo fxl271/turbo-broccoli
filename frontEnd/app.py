@@ -40,7 +40,7 @@ def homepage():
         for i in range(1, paramNum + 1):
             paramTag[i - 1] = request.values["param" + str(i) + "value"]
         print(paramTag)
-
+        
         peftType = request.form["peftType"]
         print(peftType)
 
@@ -49,14 +49,14 @@ def homepage():
 
         if peftType == "None":
             mlInstance.setVars(
-                modelTag, datasetTag, paramTag
+                modelTag, datasetTag, paramTag, subsetTag
             )  # = MLThing(modelTag, datasetTag, paramTag)
         else:
             mlInstance.setVars(
-                modelTag, datasetTag, paramTag, peftType=peftType
+                modelTag, datasetTag, paramTag, subsetTag, peftType=peftType
             )  # = MLThing(modelTag, datasetTag, paramTag, peftType=peftType)
 
-        mlInstance.run()
+        mlInstance.run2()
         output = pd.read_csv("emissions.csv").iloc[-1]
 
         output["duration"] = str(datetime.timedelta(seconds=output["duration"]))
@@ -104,10 +104,9 @@ def emissions():
 
 @app.route("/fetchLabels", methods=["POST"])
 def process_labels():
-    data = request.json["LabelArray"]
+    data = request.json["SelectedArray"]
     # result = sum(data)
-    mlInstance.setLbArray(data)
-
+    mlInstance.setLbArray(data[1], data[0])
     # print(data)
     # print(result)
     return jsonify({"result": 5})
